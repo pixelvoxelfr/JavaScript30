@@ -3,11 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="reset.css">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
 <body>
-
+<div class="blaster">
+  <img src="./ghetto_blaster.png" alt="Ghetto Blaster">
+  <div class="loops">
+    <div class="loop">1</div>
+    <div class="loop">2</div>
+    <div class="loop">3</div>
+  </div>
+  <div class="buttons">
+    <div class="stop"></div>
+    <div class="start"></div>
+  </div>
+</div>
 
   <div class="keys">
     <div data-key="65" class="key">
@@ -58,7 +70,97 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
+  <audio data-key="32" id="loop1" src="sounds/loop1.mp3"></audio>
+  <audio data-key="32" id="loop2" src="sounds/loop2.mp3"></audio>
+  <audio data-key="32" id="loop3" src="sounds/loop3.mp3"></audio>
+
 <script>
+
+let activeLoop = document.querySelector('#loop1');
+activeLoop.loop = true;
+let playing = false;
+
+function playGlobal(event){
+  const eventKeycode = event.keyCode;
+  if (eventKeycode === 32) {
+    event.preventDefault();
+    playing = !playing;
+    console.log(playing);
+    playerPlaying(event);
+  } else {
+    playSound(event);
+  }
+}
+
+function playerPlaying(event) {
+  if (playing) {
+    playLoop(event);
+  } else {
+    activeLoop.pause();
+    activeLoop.currentTime = 0;
+  }
+}
+
+function loopSetup(loop) {
+  activeLoop.pause();
+  activeLoop.currentTime = 0;
+  activeLoop = document.querySelector(`#${loop}`);
+  activeLoop.loop = true;
+  activeLoop.play();
+  playing = true;
+}
+
+function playLoop(event) {
+  activeLoop.play();
+  loopSwitch();
+}
+
+function loopSwitch() {
+  const loopSelector = document.querySelector('.loops');
+  const loops = document.querySelectorAll('.loop');
+  loopSelector.addEventListener('click', (event) => {
+    switch (event.target.textContent) {
+      case "1":
+        loops.forEach(loop => loop.classList.remove('loop-active'));
+        event.target.classList.add('loop-active');
+        loopSetup('loop1');
+      break;
+      case "2":
+        loops.forEach(loop => loop.classList.remove('loop-active'));
+        event.target.classList.add('loop-active');
+        loopSetup('loop2');
+      break;
+      case "3":
+        loops.forEach(loop => loop.classList.remove('loop-active'));
+        event.target.classList.add('loop-active');
+        loopSetup('loop3');
+      break;
+    }
+  });
+}
+
+function playSound(event) {
+  const eventKeycode = event.keyCode;
+  const audio = document.querySelector(`audio[data-key="${eventKeycode}"]`);
+  if (!audio) { return;}
+  audio.currentTime = 0;
+  audio.play();
+  const key = document.querySelector(`.key[data-key="${eventKeycode}"]`);
+  key.classList.add('playing');
+}
+
+function removeTransition(event) {
+  if (event.propertyName !== 'transform') return;
+  this.classList.remove('playing');
+}
+
+const keys = document.querySelectorAll('.key');
+keys.forEach((key) => {
+  key.addEventListener('transitionend', removeTransition);
+});
+
+window.addEventListener('keydown', playGlobal);
+loopSwitch();
 
 </script>
 

@@ -1,7 +1,14 @@
+:root {
+  --red: #e60300;
+  --yellow: #f3c205;
+  --blue: #0284df;
+}
+
 html {
   font-size: 10px;
-  background: url('./background.jpg') bottom center;
+  background: var(--blue);
   background-size: cover;
+  box-sizing: border-box;
 }
 
 body,html {
@@ -10,32 +17,62 @@ body,html {
   font-family: sans-serif;
 }
 
-.keys {
+.blaster {
   display: flex;
-  flex: 1;
-  min-height: 100vh;
+  flex-flow: column nowrap;
+  justify-content: center;
   align-items: center;
+}
+
+.loops {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  gap: 1rem;
+  
+}
+
+.loop {
+  border: .4rem solid black;
+  border-radius: 2rem;
+  width: fit-content;
+  padding: 2rem;
+  font-size: 4rem;
+  text-align: center;
+  color: black;
+  background-color: var(--red);
+}
+
+.loop-active{
+  background-color: var(--yellow);
+}
+
+.keys {
+  margin-top: 4rem;
+  display: flex;
+  flex-flow: row wrap;
+  flex: 0;
+  align-items: center;
+  align-content: center;
   justify-content: center;
 }
 
 .key {
   border: .4rem solid black;
-  border-radius: .5rem;
+  border-radius: 2rem;
   margin: 1rem;
   font-size: 1.5rem;
   padding: 1rem .5rem;
-  transition: all .07s ease;
+  transition: all 100ms ease;
   width: 10rem;
   text-align: center;
-  color: white;
-  background: rgba(0,0,0,0.4);
-  text-shadow: 0 0 .5rem black;
+  color: black;
+  background: var(--red);
 }
 
 .playing {
   transform: scale(1.1);
-  border-color: #ffc600;
-  box-shadow: 0 0 1rem #ffc600;
+  background: var(--yellow);
 }
 
 kbd {
@@ -47,5 +84,5 @@ kbd {
   font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: .1rem;
-  color: #ffc600;
+  color: black;
 }
