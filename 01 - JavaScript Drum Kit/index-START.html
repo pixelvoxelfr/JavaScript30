@@ -9,15 +9,16 @@
 </head>
 <body>
 <div class="blaster">
-  <img src="./ghetto_blaster.png" alt="Ghetto Blaster">
+  <img src="./ghetto_blaster.png" alt="Ghetto Blaster" class="blaster-img">
   <div class="loops">
     <div class="loop">1</div>
     <div class="loop">2</div>
     <div class="loop">3</div>
   </div>
   <div class="buttons">
-    <div class="stop"></div>
-    <div class="start"></div>
+    <p>Spacebar: </p>
+    <div class="button-press button-active">STOP</div>
+    <div class="button-press">START</div>
   </div>
 </div>
 
@@ -85,19 +86,27 @@ function playGlobal(event){
   if (eventKeycode === 32) {
     event.preventDefault();
     playing = !playing;
-    console.log(playing);
     playerPlaying(event);
+    togglePlayButtons();
   } else {
     playSound(event);
   }
 }
 
+function togglePlayButtons () {
+  const buttons = document.querySelectorAll('.button-press');
+  buttons.forEach(button => {button.classList.toggle('button-active');});
+}
+
 function playerPlaying(event) {
   if (playing) {
     playLoop(event);
+    activeLoop.classList.add('playing');
   } else {
     activeLoop.pause();
     activeLoop.currentTime = 0;
+    // const loops = document.querySelectorAll('.loop');
+    // loops.forEach(loop => loop.classList.remove('loop-active'));
   }
 }
 
@@ -118,7 +127,19 @@ function playLoop(event) {
 function loopSwitch() {
   const loopSelector = document.querySelector('.loops');
   const loops = document.querySelectorAll('.loop');
+
+  // Event on clicks on the loops button
+
   loopSelector.addEventListener('click', (event) => {
+    
+    // If case to switch the stop/start buttons
+    const buttons = document.querySelectorAll('.button-press')
+    buttons.forEach(button => {
+      if(button.classList.contains('button-active') && button.textContent === "STOP") {
+        togglePlayButtons ();
+      }
+    })
+
     switch (event.target.textContent) {
       case "1":
         loops.forEach(loop => loop.classList.remove('loop-active'));
