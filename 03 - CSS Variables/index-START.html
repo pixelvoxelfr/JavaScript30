@@ -9,6 +9,8 @@
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
   <div class="controls">
+    <!-- The "data-NAME" creates an object at the input level with the possibility to access the NAME value, for example here we get the sizing type to add it to the changes happening on the documentElement properties -->
+
     <label for="spacing">Spacing:</label>
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
@@ -17,12 +19,37 @@
 
     <label for="base">Base Color</label>
     <input id="base" type="color" name="base" value="#ffc600">
+
+    <label for="border">Border width</label>
+    <input id="border" type="range" name="border" min="0" max="20" value="2" data-sizing="px">
+
+    <label for="border-color">Border Color</label>
+    <input id="border-color" type="color" name="border-color" value="#bada55">
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      --base: #fedefe;
+      --spacing: 10px;
+      --blur: 10px;
+      --border: 2px;
+      --border-color: #BADA55;
+    }
 
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+      border-width: var(--border);
+      border-style: solid;
+      border-color: var(--border-color);
+    }
+
+    .hl {
+      color: var(--base);
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -46,6 +73,18 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input');
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+    inputs.forEach(input => {
+          input.addEventListener('change', handleUpdate);
+        });
+    inputs.forEach(input => {
+      input.addEventListener('mousemove', handleUpdate);
+    });
+
   </script>
 
 </body>
