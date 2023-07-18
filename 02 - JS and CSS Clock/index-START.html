@@ -16,10 +16,17 @@
       </div>
     </div>
 
+    <div class="numerical">
+      <span class="num-hours"></span>
+      <span>:</span>
+      <span class="num-min"></span>
+      <span>:</span>
+      <span class="num-sec"></span>
+    </div>
 
   <style>
     html {
-      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
+      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=10);
       background-size: cover;
       font-family: 'helvetica neue';
       text-align: center;
@@ -31,6 +38,7 @@
       font-size: 2rem;
       display: flex;
       flex: 1;
+      flex-flow: column;
       min-height: 100vh;
       align-items: center;
     }
@@ -63,12 +71,58 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s cubic-bezier(0.42, 0, 0.45, 1.96)
+    }
+    
+    .numerical {
+      padding: 1rem;
+      background-color: #018fed38;
+      display: flex;
+      gap: 1rem;
     }
 
+    .numerical * {
+      color: white;
+      font-size: 2rem;
+    }
   </style>
 
   <script>
+// Selecting the different hands
+const secondHand = document.querySelector('.second-hand');
+const minuteHand = document.querySelector('.min-hand');
+const hourHand = document.querySelector('.hour-hand');
 
+function setDate() {
+  // Fetching the current time and the seconds, minutes and hours
+  const now = new Date();
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes();
+  const hours = now.getHours();
+
+  // Converting the time values into rotation degrees values
+  const secondsDegree = ((seconds / 60) * 360) + 90;
+  const minutesDegree = ((minutes / 60) * 360) + 90;
+  const hoursDegree = ((hours / 12) * 360) + 90;
+
+  // Applying the rotation to the hands
+  secondHand.style.transform = `rotate(${secondsDegree}deg)`;
+  minuteHand.style.transform = `rotate(${minutesDegree}deg)`;
+  hourHand.style.transform = `rotate(${hoursDegree}deg)`;
+
+  // Adding a numerical clock
+  const numHours = document.querySelector('.num-hours');
+  const numMin = document.querySelector('.num-min');
+  const numSec = document.querySelector('.num-sec');
+
+  numHours.textContent = hours;
+  numMin.textContent = minutes;
+  numSec.textContent = seconds;
+}
+
+setInterval(setDate, 1000);
 
   </script>
 </body>
