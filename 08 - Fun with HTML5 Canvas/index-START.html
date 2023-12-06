@@ -6,13 +6,128 @@
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
 <body>
+  <menu class="menu">
+    <div class="shapes">
+      <div class="square"></div>
+      <div class="circle"></div>
+    </div>
+  </menu>
 <canvas id="draw" width="800" height="800"></canvas>
+
 <script>
+
+const canvas = document.getElementById("draw");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+ctx.strokeStyle = "black";
+ctx.lineJoin = "round";
+ctx.lineCap = "round";
+ctx.lineWidth = 100;
+ctx.globalCompositeOperation = "source-over";
+const brushWidth = ctx.lineWidth;
+
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let hue = 0;
+let direction = true;
+let speed = 0;
+
+function draw(event) {
+  if (!isDrawing) {
+    return; // stops the function when the mouse is not clicking
+  }
+  // console.log(event);
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(event.offsetX, event.offsetY);
+  ctx.stroke();
+  [lastX, lastY] = [event.offsetX, event.offsetY];
+  hue++;
+  if (hue >= 360) { hue = 0; };
+
+  ctx.lineWidth = brushWidth - speed;
+  // // Old method to change the size of the brush
+  // if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+  //   direction = !direction;
+  // }
+  // if (direction) {
+  //   ctx.lineWidth++;
+  // } else {
+  //   ctx.lineWidth--;
+  // }
+}
+
+canvas.addEventListener('mousemove', (event) => {
+  draw(event);
+  speed = 5*Math.sqrt(event.movementX*event.movementX+event.movementY*event.movementY);
+  console.log(speed);
+});
+
+canvas.addEventListener('mousedown', (event) => {
+  isDrawing = true;
+  lastX = event.offsetX;
+  lastY = event.offsetY;
+})
+canvas.addEventListener('mouseup', () => {
+  isDrawing = false;
+})
+
+// Menu changes
+
+const shapes = document.querySelector('.shapes');
+const square = document.querySelector('.square');
+const circle = document.querySelector('.circle');
+
+shapes.addEventListener('click', (event) => {
+  if (event.target === square) {
+    square.style.backgroundColor = "red";
+    circle.style.backgroundColor = "black";
+    ctx.lineJoin = "square";
+    ctx.lineCap = "square";
+  } else if (event.target === circle) {
+    square.style.backgroundColor = "black";
+    circle.style.backgroundColor = "red";
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+  }
+})
+
 </script>
 
 <style>
   html, body {
     margin: 0;
+  }
+
+  menu {
+    padding: 2rem;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid black;
+  }
+
+  .shapes {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .square {
+    background-color: black;
+    padding: 1rem;
+  }
+
+  .circle {
+    background-color: red;
+    padding: 1rem;
+    border-radius: 50%;
   }
 </style>
 
