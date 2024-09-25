@@ -7,6 +7,31 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <script>
+      const sequence = ["a", "b", "c", "b", "a", "c"];
+      const pushed = [];
+
+      window.addEventListener("keyup", (e) => {
+        // const pushedLength = pushed.length;
+        // if (e.key === sequence[pushedLength]) console.log("match");
+        // else {
+        //   console.log("fail");
+        //   pushed.length = 0;
+        //   return;
+        // }
+        pushed.push(e.key);
+
+        pushed.splice(-sequence.length - 1, pushed.length - sequence.length);
+
+        if (pushed.join() === sequence.join()) {
+          const div = document.createElement("div");
+          const p = document.createElement("p");
+          const text = document.createTextNode("Success");
+          p.appendChild(text);
+          const body = document.querySelector("body");
+          body.appendChild(div).appendChild(p);
+        }
+      });
+    </script>
   </body>
 </html>
